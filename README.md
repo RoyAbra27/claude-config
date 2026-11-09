@@ -1,6 +1,6 @@
 # claude-config
 
-My Claude Code setup (`~/.claude`): global rules, custom skills and agents, and the hooks that enforce them. On Windows 11 a new machine is ready in one command.
+My Claude Code setup (`~/.claude`): global rules, custom skills and agents, and the hooks that enforce them. On Windows 11 a new machine is set up with one clone, one login and one script.
 
 It's built for backend work (NestJS/TypeScript, Python, infra), but most of it isn't tied to a stack.
 
@@ -19,11 +19,22 @@ in-chat correction  ->  CLAUDE.md rule (dated)  ->  hook that blocks it
 - **You talk to one coordinator.** When subagents do the work, the main session doesn't narrate them. It interrupts only for a decision only you can make, logs its own judgment calls, and ends with one report in attention order: decisions, then failures, then finished PRs. Plans meant for delegation answer every owner decision up front, so the run doesn't stall midway.
 - **Sessions end with a reflection.** `/reflect` reviews the session's corrections and failed attempts and proposes the smallest fix at the right layer: a skill line, a memory entry, a CLAUDE.md rule or a hook. Nothing gets applied until you approve it.
 
+## How a task flows
+
+The router picks these automatically. You mostly answer questions and read one report at the end.
+
+1. **Idea to spec:** `superpowers:brainstorming` asks the questions, and `consult` argues both sides of any expensive fork.
+2. **Spec to plan:** the plan opens with the owner decisions you answer up front, and every task lists its files, its dependencies and a `Done when:` command.
+3. **Plan review:** `plan-redteam` attacks the plan before anything runs, and `plan-redteam-gate.sh` won't let plan mode exit without that pass.
+4. **Execution:** sequential tasks run under `superpowers:subagent-driven-development`, and waves of file-disjoint tasks run through `parallel-ticket-delivery`. The main session acts as the only coordinator and reruns every check itself.
+5. **Before merge:** `branch-audit` for big or sensitive branches, `/code-review` for small diffs.
+6. **Session end:** `/save-session` writes the state for next time and runs `/reflect`, which turns the session's mistakes into proposed rule or skill fixes.
+
 ## What's inside
 
 ```
-CLAUDE.md          global instructions: debugging protocol, git, verification, subagent dispatch
-settings.json      hooks, auto-mode allow/deny rules, plugins, status line
+CLAUDE.md          global instructions: debugging protocol, git, verification, subagent dispatch, rtk usage
+settings.json      hooks, env, auto-mode allow/deny rules, plugins, status line
 hooks/             guard, gates and session context (see below)
 skills/            custom skills
 agents/            custom subagents
@@ -38,10 +49,18 @@ bootstrap.sh       new-machine setup
 
 | Hook | When | What it does |
 |---|---|---|
-| `guard.sh` | before Edit, Write, Bash | Blocks `rm -rf`, force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Tests: `bash hooks/guard.test.sh` |
+| `guard.sh` | before Edit, Write, Bash | Blocks `rm -rf`, force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
 | `plan-redteam-gate.sh` | before ExitPlanMode | Blocks executing a plan until it has had a red-team pass (or an explicit, reasoned opt-out) |
 | `session-context.sh` | session start, resume, compact | Injects working state from the repo itself (branch, uncommitted files, recent commits) plus the skill router, and flags a last session that ended without `/reflect` |
 | `lint-on-save.sh` | after Edit, Write | Runs the project's own prettier and eslint on TS/JS files. Never blocks |
+
+### Commands
+
+| Command | What it does |
+|---|---|
+| `/save-session` | Writes the goal, what's done and verified, what failed, what couldn't run, and what's next to `~/.claude/sessions/`. Updated at each milestone, and runs `/reflect` on the final save |
+| `/resume-session` | Reads a saved session file, summarizes it, and confirms the plan before continuing |
+| `/reflect` | Lists what went wrong this session, with evidence, and proposes the smallest fix at the right layer. Applies only what you approve |
 
 ### Skills
 
@@ -98,7 +117,7 @@ On macOS or Linux, skip `bootstrap.sh` and the dotfiles. The hooks are plain bas
 
 ## Credits
 
-These third-party skills are installed from upstream by `bootstrap.sh` and are not included in this repo:
+These third-party skills are not included in this repo. `scripts/install-skills.sh` (which `bootstrap.sh` runs) installs the ones you pick from upstream:
 
 | Skill | Upstream | License |
 |---|---|---|
