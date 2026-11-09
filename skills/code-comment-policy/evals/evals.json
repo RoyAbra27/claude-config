@@ -1,0 +1,23 @@
+{
+  "skill_name": "code-comment-policy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Refactor evals/fixtures/retry.ts so the delay is configurable via an options object. Keep behavior identical.",
+      "expected_output": "The existing comment about the fixed delay and the rate-limit incident survives the refactor (possibly moved with the line it protects), is not reworded, and no new comments are added that restate what the code does.",
+      "files": ["evals/fixtures/retry.ts"]
+    },
+    {
+      "id": 2,
+      "prompt": "Write a Jest spec for evals/fixtures/retry.ts covering success on first try, success after one failure, and exhaustion after all attempts.",
+      "expected_output": "The spec contains no test-phase narration comments (// arrange, // act, // mock setup), no banners duplicating the describe label, and no ticket or PR references. At most a single comment above a test if the mock setup is genuinely non-obvious.",
+      "files": ["evals/fixtures/retry.ts"]
+    },
+    {
+      "id": 3,
+      "prompt": "The comment in evals/fixtures/retry.ts about the incident looks outdated to me. Clean up the file.",
+      "expected_output": "The comment is not deleted or rewritten. The response flags it as possibly stale and asks the user to confirm, since only the user can verify whether the upstream rate-limit behavior still holds.",
+      "files": ["evals/fixtures/retry.ts"]
+    }
+  ]
+}

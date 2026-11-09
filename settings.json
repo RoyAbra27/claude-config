@@ -1,0 +1,174 @@
+{
+  "env": {
+    "EDITOR": "zed",
+    "RTK_SUPPRESS_HOOK_WARNING": "1"
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c '\"$HOME/.claude/hooks/guard.sh\"'"
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c '\"$HOME/.claude/hooks/plan-redteam-gate.sh\"'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c '\"$HOME/.claude/hooks/lint-on-save.sh\"'"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c '\"$HOME/.claude/hooks/plan-redteam-gate.sh\"'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"$HOME/.claude/skills/impeccable/scripts/impeccable\" ] || \"$HOME/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c '\"$HOME/.claude/hooks/session-context.sh\"'"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"$HOME/.claude/skills/impeccable/scripts/impeccable\" ] || \"$HOME/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "timeout": 5,
+            "statusMessage": "Preparing build session"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"$HOME/.claude/skills/impeccable/scripts/impeccable\" ] || \"$HOME/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "timeout": 30,
+            "statusMessage": "Design deep pass"
+          }
+        ]
+      }
+    ]
+  },
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c 'export COLUMNS=$(tput cols 2>/dev/null || echo 120); plugin_dir=$(ls -d \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | awk -F/ '\"'\"'{ print $(NF-1) \"\\t\" $0 }'\"'\"' | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n | tail -1 | cut -f2-); exec \"/c/nvm4w/nodejs/node\" \"${plugin_dir}dist/index.js\"'"
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": false,
+    "commit-commands@claude-plugins-official": false,
+    "superpowers@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-hud@claude-hud": true,
+    "code-simplifier@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
+    "skill-creator@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "hyperframes@hyperframes": true,
+    "kotlin-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "android-skills": {
+      "source": {
+        "source": "github",
+        "repo": "android/skills"
+      }
+    },
+    "hyperframes": {
+      "source": {
+        "source": "github",
+        "repo": "heygen-com/hyperframes"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark",
+  "editorMode": "normal",
+  "autoCompactEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Lockfile Installs: `npm ci`, `npm install` with no package argument, and `uv sync` are allowed inside the working repo, provided the agent has not modified package.json, the lockfile, or pyproject.toml in this session. Not covered: `npm install <package>`, `npx <package>`, or `uv add`/`uv run --with` naming a package not already in the manifest.",
+      "Toolchain Binaries: running prettier, eslint, jest, vitest, tsc, tsx, nest, husky, pytest, ruff, or mypy via `npx`, `npm run`, or `uv run` is allowed. This blesses the invocation, not a script body: `npm run <script>` or `uv run <cmd>` whose name or visible body indicates deploy, release, publish, migrate, seed, reset, `*:prod`, or infra apply is judged as that operation, and a script whose body is not visible in the transcript is covered only when its name is lint, test, format, build, typecheck, or start. `uv run` of a URL or a path outside the repo is not covered."
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Protected-Branch Push [named+specifics - must name: the branch]: pushing to a branch whose name is exactly `main` or `master`, or whose first `/`-delimited segment begins with `release`, `production`, or `deploy` (matches `release/1.2` and `deploy-staging`; does not match `feat/main-menu` or `fix/deploy-docs`). This rule takes precedence over the default Git Push Destination exception for these branch names. Clears when the user's message names that branch as the push target.",
+      "PR Merge [named+specifics - must name: the PR number or head branch]: merging a pull request by any vehicle: `gh pr merge` including `--auto`, `gh api` calls to `/pulls/<n>/merge`, merge-queue enqueue, or `git merge` followed by a push to a protected branch. Stricter than the default Merge Without Review: human approval on the PR does not clear it; only the user naming the PR does. `--admin` or `--force` merges additionally require the user to name the check being bypassed.",
+      "Hook Bypass [named+specifics - must name: the bypass and the reason]: skipping git hooks or signing by any means: `--no-verify` or `-n` on commit or push, `--no-gpg-sign`, `-c core.hooksPath=...`, `-c commit.gpgsign=false`, env vars such as `HUSKY=0`, `HUSKY_SKIP_HOOKS=1`, `SKIP=<hook>`, `PRE_COMMIT_ALLOW_NO_CONFIG=1`, or deleting, renaming, or chmod-ing anything under `.git/hooks/` or `.husky/`. Clears only when the user explicitly asks to skip hooks or signing for that specific commit or push.",
+      "IaC and Cluster Mutation [named+specifics - must name: the target environment or workspace and the change]: `terraform`/`terragrunt`/`pulumi`/`cdk` apply, destroy, import, or state mv/rm; `helm install/upgrade/uninstall/rollback`; and mutating `kubectl` verbs (apply, create, delete, patch, edit, scale, drain, cordon, exec, port-forward) against any cluster, including dev. Read-only `plan`, `diff`, `validate`, `get`, `describe`, `logs`, `template` are not covered."
+    ],
+    "environment": [
+      "$defaults",
+      "**Primary use of Claude Code**: backend development (NestJS/TypeScript, Python) and infra (Terraform, Helm, AWS Lambda).",
+      "**Org-specific CLIs**: `rtk` is a pure output filter with no side effects of its own; judge `rtk <cmd>` exactly as `<cmd>` run directly. `jf` is the JFrog CLI. `uv`/`uvx` are the Python package/runner tools; installs go through the project lockfile.",
+      "**Sensitive data locations & audiences**: in addition to the default heuristic, treat any `.env*` file, Terraform state, and kubeconfig as credential-bearing; never print, commit, or transmit their contents."
+    ]
+  },
+  "description": "Impeccable design detector: immediate-tier checks after Edit/Write on UI files, full-rule deep pass on Stop."
+}

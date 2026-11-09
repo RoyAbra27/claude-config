@@ -1,0 +1,23 @@
+{
+  "skill_name": "frontend-flow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "our landing page at apps/web/src/pages/index.tsx looks dated and kind of generic, can you redesign it? keep our logo and colors, the copy is fine",
+      "expected_output": "Captures PRODUCT.md/DESIGN.md via impeccable, runs critique, asks refine vs reinvent, picks refine (brand kept), applies targeted impeccable commands, finishes with audit + screenshots at two widths. Does not run Hallmark install-hook.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "i want a totally new look for the marketing site, nothing like the current one. it's an astro site in /site. go wild but keep the pages and forms working",
+      "expected_output": "Context + critique first, user picks reinvent, reads hallmark SKILL.md and follows redesign flow, asks before renaming DESIGN.md, keeps content and wiring, ends with impeccable audit and screenshots.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "the dashboard screen in our android app (Compose, app/src/main/java/.../report/ReportScreen.kt) feels cluttered and users miss the main number. improve the ux/ui",
+      "expected_output": "Impeccable critique/audit with native references, Compose changes via android-skills, verification with mobile MCP screenshot and element list on a device or emulator, gradle unit tests run.",
+      "files": []
+    }
+  ]
+}

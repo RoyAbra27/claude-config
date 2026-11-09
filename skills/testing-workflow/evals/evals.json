@@ -1,0 +1,23 @@
+{
+  "skill_name": "testing-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Bug: slugify('  Hello World  ') returns '-hello-world-' but should return 'hello-world'. Fix it in evals/fixtures/slugify.ts.",
+      "expected_output": "A failing test case reproducing the leading/trailing hyphen bug is added to the existing it.each table in slugify.spec.ts BEFORE the implementation changes, the run output showing it fail is shown, then the fix lands and the spec is re-run and passes. No separate copy-pasted it() block when the existing parameterized table fits.",
+      "files": ["evals/fixtures/slugify.ts", "evals/fixtures/slugify.spec.ts"]
+    },
+    {
+      "id": 2,
+      "prompt": "Add a maxLength option to slugify in evals/fixtures/slugify.ts that truncates the result without leaving a trailing hyphen.",
+      "expected_output": "Spec cases for the new option are written first and shown failing, then the implementation is added, then the spec is run and passes. The existing spec file is extended rather than a new one created.",
+      "files": ["evals/fixtures/slugify.ts", "evals/fixtures/slugify.spec.ts"]
+    },
+    {
+      "id": 3,
+      "prompt": "Change slugify in evals/fixtures/slugify.ts to throw on empty input instead of returning an empty string.",
+      "expected_output": "The existing spec is updated in the same change to assert the throw, the source file is read fully before editing, and the spec is run with output shown before claiming done.",
+      "files": ["evals/fixtures/slugify.ts", "evals/fixtures/slugify.spec.ts"]
+    }
+  ]
+}

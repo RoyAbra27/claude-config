@@ -1,0 +1,33 @@
+{
+  "skill_name": "parallel-ticket-delivery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ship tickets 41, 42 and 43 in parallel, one PR each. 41 adds a /health/deep endpoint, 42 fixes the date parser in src/utils/dates.ts, 43 adds a REDIS_TTL env var",
+      "expected_output": "Reads the repo CLAUDE.md for conventions, lists files per ticket, notices that only 43 touches the config spine (so it may own it), confirms disjointness, writes one shared brief file, checks all three deltas, then dispatches 3 worktree agents in ONE message with explicit models. Stays silent while they run; reruns each check_command before accepting; sends findings back to the same agent; ends with an attention-ordered report.",
+      "assertions": [
+        "file list per ticket stated before any dispatch",
+        "one shared brief file written; each dispatch references its path instead of repeating it",
+        "all agents dispatched in a single message with isolation worktree and an explicit model",
+        "controller reruns each agent's check_command before calling the ticket done",
+        "review findings sent to the original agent via SendMessage, not fixed by the controller",
+        "final report ordered: decisions needed, failed/parked, ready PRs"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "do 7 and 8 in parallel: both add a new required field to AppConfig",
+      "expected_output": "Refuses to run them in parallel: both touch the shared config spine (schema, typed config, mock). Proposes serializing them or two waves.",
+      "assertions": [
+        "identifies the shared config files as an overlap",
+        "does not dispatch both in parallel"
+      ]
+    }
+  ],
+  "trigger_evals": [
+    {"query": "fan these 4 issues out to agents, one PR per issue", "should_trigger": true},
+    {"query": "ship tickets 12, 15 and 19 in parallel", "should_trigger": true},
+    {"query": "execute the plan in docs/plans/billing.md with subagents", "should_trigger": false},
+    {"query": "fix the typo in the README", "should_trigger": false}
+  ]
+}

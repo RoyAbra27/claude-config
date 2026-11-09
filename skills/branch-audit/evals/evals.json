@@ -1,0 +1,56 @@
+{
+  "skill_name": "branch-audit",
+  "note": "Each full run costs about 1-1.5M tokens (5-7 Opus lanes + consolidator). Run the process evals on a real branch the user is about to merge rather than on a toy repo; references/lane-history.md holds past runs to compare against. Grade from the controller transcript and the workspace files, not from the final chat message.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ok the branch is done, 38 commits, api + worker + terraform. lets dispatch some opus reviewers of multiple kinds, security, architecture, simplification, i want a massive audit of everything we did, dont be hesitant about tokens",
+      "expected_output": "Packages the branch once (filtered diff file outside the repo) and a known-open list; writes one shared brief from the template; dispatches the always-on lanes (api-surface, data-path, conformance, deploy, omissions) in ONE message on Opus in the background, adding client-contract/privacy only if the branch warrants; relays each lane's Important titles as it returns; dispatches one consolidator; verifies top items at file:line itself; asks USER-DECISION items via AskUserQuestion with a recommendation first; no code edited before the user decides; one fix wave then one scoped re-review.",
+      "files": [],
+      "assertions": [
+        "branch diff package written to a file outside the repo, lockfiles/generated files excluded",
+        "shared brief file written and contains the hard rules (read-only, no state-resetting tests, no subagents) and the finding format",
+        "brief contains a known-open-items list (or states there is none)",
+        "all lanes dispatched in a single message with model opus and run_in_background",
+        "no more than 7 lanes dispatched; no standalone ponytail lane unless the user asked for simplification only",
+        "omissions lane dispatched",
+        "exactly one consolidator dispatched after all lanes returned",
+        "controller reads at least the top Important items at their cited file:line before presenting",
+        "USER-DECISION items asked via AskUserQuestion with the recommended option first",
+        "no repo file edited by the controller or lanes before the user answers (git status clean apart from the workspace)",
+        "lane statistics appended to references/lane-history.md"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "we're about to put real customer personal data on this. before i merge feat/intake-forms, audit the whole thing properly - i keep worrying we missed something like we did with cache headers last time",
+      "expected_output": "Triggers branch-audit (not /code-review). Adds the privacy lane because of personal data, and client-contract only if the branch ships a client guide. The omissions lane is told the Cache-Control example and which lanes exist. States the token cost before dispatching (the user did not waive it).",
+      "files": [],
+      "assertions": [
+        "privacy lane dispatched",
+        "omissions lane prompt names the other lanes and gives a 'nobody asked for it' example",
+        "cost estimate stated to the user before dispatch"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "can you review this diff before i push? it's 3 files, just renaming the retry helper and fixing a typo in the README",
+      "expected_output": "Does NOT run branch-audit: a 3-file rename is a small diff; uses /code-review or a direct read, and may mention ponytail-review. No Opus lanes dispatched.",
+      "files": [],
+      "assertions": [
+        "no branch-audit lanes dispatched",
+        "small-diff review path used instead"
+      ]
+    }
+  ],
+  "trigger_evals": [
+    {"query": "branch is 40 commits, touches auth and the db, I want every kind of reviewer on it before merge", "should_trigger": true},
+    {"query": "do a full audit of feat/billing before we deploy, security + architecture + whatever else you think", "should_trigger": true},
+    {"query": "what did we miss on this branch? run a bunch of agents over it", "should_trigger": true},
+    {"query": "sdd finished all 14 tasks, run the final review but make it a deep one with multiple opus reviewers", "should_trigger": true},
+    {"query": "review my PR #212 for correctness", "should_trigger": false},
+    {"query": "red team the implementation plan in docs/plans/payments.md before we start", "should_trigger": false},
+    {"query": "is this function over-engineered? src/utils/retry.ts", "should_trigger": false},
+    {"query": "audit the whole repo for bloat and things to delete", "should_trigger": false}
+  ]
+}

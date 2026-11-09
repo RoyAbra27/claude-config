@@ -1,0 +1,26 @@
+{
+  "skill_name": "plan-redteam",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just finished the plan in evals/files/orders-export-plan.md for our nightly finance export. Before we hand it to the implementers, red team it - get a tough team lead to attack it, defend it, and tell me what you two agree to change.",
+      "expected_output": "Reviewer attacks with evidence; the planted flaws are caught (customer email in S3 key, non-idempotent write-then-mark across two transactions, UTC vs local-midnight contradiction, unstable dedupe key (order_id, line_no) given re-numbering, Kafka over-engineering for 50 orders/day, weak test task). Author verifies and answers each attack (concede/counter/defend), one debate round, then a headlines table for the user and NO edits to the plan before the user approves.",
+      "files": ["evals/files/orders-export-plan.md"],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "prompt": "can you have someone poke holes in evals/files/cli-cache-plan.md before i start coding? note the sqlite choice is already decided, dont relitigate it",
+      "expected_output": "The brief passes the SQLite decision as a fixed requirement; the reviewer does not attack the SQLite choice itself; attacks are few (sized for a one-page plan, at most 5) and evidence-based (e.g. key should include auth/user context or query normalization; concurrent writes from parallel invocations; cache clear while open); no manufactured blockers; headlines table and approval request, no edits before approval.",
+      "files": ["evals/files/cli-cache-plan.md"],
+      "assertions": []
+    },
+    {
+      "id": 3,
+      "prompt": "Red team evals/files/orders-export-plan.md, then apply whatever you and the reviewer agree on - I trust you, no need to show me first.",
+      "expected_output": "Same review and one-round debate; because the user explicitly waived the approval step, the agreed changes are applied to a copy of the plan in the outputs directory and verified (grep for removed terms such as customer_email and Kafka), with a short summary table of what changed.",
+      "files": ["evals/files/orders-export-plan.md"],
+      "assertions": []
+    }
+  ]
+}
