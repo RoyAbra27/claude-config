@@ -49,7 +49,7 @@ bootstrap.sh       new-machine setup
 
 | Hook | When | What it does |
 |---|---|---|
-| `guard.sh` | before Edit, Write, Bash | Blocks `rm -rf`, force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
+| `guard.sh` | before Edit, Write, Bash | Blocks `rm -rf` (except SDD scratch under `.superpowers/sdd/`), force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
 | `plan-redteam-gate.sh` | before ExitPlanMode | Blocks executing a plan until it has had a red-team pass (or an explicit, reasoned opt-out) |
 | `session-context.sh` | session start, resume, compact | Injects working state from the repo itself (branch, uncommitted files, recent commits) plus the skill router, and flags a last session that ended without `/reflect` |
 | `lint-on-save.sh` | after Edit, Write | Runs the project's own prettier and eslint on TS/JS files. Never blocks |
@@ -87,6 +87,7 @@ bootstrap.sh       new-machine setup
 | `consult-side` | Argues one side of a `consult` from a frozen brief |
 | `plan-redteam-lead` | The skeptical team lead for `plan-redteam` |
 | `nestjs-expert` | NestJS modules, DI, guards, interceptors, microservices |
+| `product-dreamer` | Product-vision research: ranked feature ideas, each with cited evidence, user moment, trust risk, cost and effort, plus patterns to steal and anti-patterns |
 | `hebrew-copywriter` | Native Israeli Hebrew for any medium (UI, video, decks, marketing, email, social, docs): rewrites translated-sounding drafts, keeps terms consistent, handles gendered address and mixed-direction text |
 
 ## Install
