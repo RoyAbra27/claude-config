@@ -18,6 +18,24 @@
       "prompt": "the dashboard screen in our android app (Compose, app/src/main/java/.../report/ReportScreen.kt) feels cluttered and users miss the main number. improve the ux/ui",
       "expected_output": "Impeccable critique/audit with native references, Compose changes via android-skills, verification with mobile MCP screenshot and element list on a device or emulator, gradle unit tests run.",
       "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "our CEO wants a data room or interactive dashboard where investors can explore our pilot results, key metrics and graphs. build it in investor-pack/",
+      "expected_output": "Treats 'data room / dashboard' as the pinned form: impeccable mode Operate, opens on explorable metrics (tiles, metric switcher, charts), not a scroll story or landing hero. Any structure round offers only dashboard layouts.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "new marketing page for our sleep app, go through the impeccable structure roll",
+      "expected_output": "Runs impeccable concept-seed exactly once with output redirected to a file and reads the file; never reruns the seed just to see cut-off output.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "finish review the data room page: capture desktop and phone screenshots for the reviewer",
+      "expected_output": "Sets each viewport before loading, navigates with a fresh query string (not a hash-only change), scrolls to top and takes viewport-sized (tall) screenshots, not full-page ones; never resizes an already-loaded page to produce the phone capture.",
+      "files": []
     }
   ]
 }

@@ -88,3 +88,12 @@ Lanes: data-path, conformance, deploy, client-contract, privacy, omissions (api-
 | privacy | 4 | 1 | 3 | 0 |
 | omissions | 9 | 4 | 5 | 1 |
 Notes: branch already had a final review + fix wave, so code lanes found Minors only. Privacy and omissions cited package.diff line numbers instead of worktree lines; tell lanes to cite worktree lines.
+
+## 2026-11-10 Project B web UI, summary verdict branch (web UI + bot text + deploy docs, 33 commits)
+Lanes (lean, user choice): conformance, data-path (adapted to the trust path from stored data to every displayed number), omissions. 27 raw -> 21 unique (8 FIX-CODE, 4 USER-DECISION, 10 FIX-DOCS, 3 DEFER, 2 DROP).
+| Lane | Raw | Dup | Unique verified | Unique Important+ |
+|---|---|---|---|---|
+| conformance | 9 | 3 | 6 | 0 |
+| data-path | 9 | 3 | 6 | 2 |
+| omissions | 9 | 0 | 9 | 0 |
+Notes: a read-only probe script in the data-path lane found two invented-number paths the per-task reviews missed; for display-of-numbers branches, tell data-path to probe every figure shown. Omissions caught a deploy runbook that fails when followed literally.

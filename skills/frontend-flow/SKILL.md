@@ -40,7 +40,7 @@ Do not run `scripts/install-hook.mjs`: it rewrites `settings.json`. Hallmark's i
 
 ## 4. Finish checks (both paths)
 
-Run `impeccable audit <target>` on the result and fix what it flags, then `polish`. On the mobile screenshot (390px), look specifically at the side gutters: text and cards should sit at least 16px from both edges, because full-bleed layouts that look intentional at 1440px often end up touching the screen edge on a phone. Before saying done, show evidence: screenshots at mobile and desktop width plus the audit outcome, per superpowers:verification-before-completion.
+Run `impeccable audit <target>` on the result and fix what it flags, then `polish`. On the mobile screenshot (390px), look specifically at the side gutters: text and cards should sit at least 16px from both edges, because full-bleed layouts that look intentional at 1440px often end up touching the screen edge on a phone. Capture each viewport from a fresh load at that size: set the viewport first, then navigate with a new query string (a hash-only change does not reload), scroll to the top, and take a viewport-sized screenshot (make the viewport tall for a whole tab) rather than a full-page one, which stacks sticky bars over the content (added 2026-11-10). Before saying done, show evidence: screenshots at mobile and desktop width plus the audit outcome, per superpowers:verification-before-completion.
 
 ## Android path
 
@@ -56,3 +56,7 @@ Replace steps 3-4 with:
 ## New page from nothing
 
 Steps 1 and 4 still apply. For step 3 the user picks: `impeccable` new-work for a page that must sit inside an existing product family, `/hallmark <prompt>` for a standalone marketing page that needs its own look.
+
+When the request names a form (dashboard, data room, deck, report), that form is pinned for both impeccable's mode and the structure round; a free roll turned a dashboard into a story page (added 2026-11-10).
+
+Run `impeccable concept-seed` once with its output redirected to a file, then read the file: every run deals a new hand, so a second run to see truncated output silently changes the roll (added 2026-11-10).
