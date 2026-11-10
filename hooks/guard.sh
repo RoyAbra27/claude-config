@@ -13,6 +13,8 @@ if [ "$TOOL" = "Bash" ] || [ "$TOOL" = "PowerShell" ]; then
   # ponytail: quote stripping is per line, and `bash -c "rm -rf x"` now passes; the
   # auto-mode classifier is the backstop. Cases live in guard.test.sh.
   UNQUOTED=$(printf '%s' "$CMD" | sed -E "s/'[^']*'//g; s/\"[^\"]*\"//g")
+  # Added 2026-11-10: SDD plan workspaces are git-ignored scratch; allow rm -rf when every target is under .superpowers/sdd/.
+  if printf '%s' "$UNQUOTED" | grep -qE '^[[:space:]]*rm[[:space:]]+-rf([[:space:]]+(\./)?\.superpowers/sdd/[A-Za-z0-9._-]+/?)+[[:space:]]*$'; then exit 0; fi
   if printf '%s' "$UNQUOTED" | grep -qiE '(^|[[:space:];&|])rm[[:space:]]+-[a-z]*r[a-z]*f|[[:space:]]rm[[:space:]]+-[a-z]*f[a-z]*r|git[[:space:]]+push([[:space:]]+[^;&|]*)?[[:space:]](--force([[:space:]]|=|$)|-f([[:space:]]|$))'     || printf '%s' "$CMD" | grep -qiE 'DROP[[:space:]]+(TABLE|DATABASE|SCHEMA)|TRUNCATE[[:space:]]+TABLE'; then
     echo "Blocked by guard hook: command matches a destructive pattern (rm -rf / git push --force / DROP|TRUNCATE). If this is truly intended, run it yourself in the terminal." >&2
     exit 2
