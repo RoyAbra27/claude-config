@@ -49,46 +49,46 @@ bootstrap.sh       new-machine setup
 
 | Hook | When | What it does |
 |---|---|---|
-| `guard.sh` | before Edit, Write, Bash | Blocks `rm -rf` (except SDD scratch under `.superpowers/sdd/`), force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
-| `plan-redteam-gate.sh` | before ExitPlanMode | Blocks executing a plan until it has had a red-team pass (or an explicit, reasoned opt-out) |
-| `session-context.sh` | session start, resume, compact | Injects working state from the repo itself (branch, uncommitted files, recent commits) plus the skill router, and flags a last session that ended without `/reflect` |
-| `lint-on-save.sh` | after Edit, Write | Runs the project's own prettier and eslint on TS/JS files. Never blocks |
+| [`guard.sh`](hooks/guard.sh) | before Edit, Write, Bash | Blocks `rm -rf` (except SDD scratch under `.superpowers/sdd/`), force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
+| [`plan-redteam-gate.sh`](hooks/plan-redteam-gate.sh) | before ExitPlanMode | Blocks executing a plan until it has had a red-team pass (or an explicit, reasoned opt-out) |
+| [`session-context.sh`](hooks/session-context.sh) | session start, resume, compact | Injects working state from the repo itself (branch, uncommitted files, recent commits) plus the skill router, and flags a last session that ended without `/reflect` |
+| [`lint-on-save.sh`](hooks/lint-on-save.sh) | after Edit, Write | Runs the project's own prettier and eslint on TS/JS files. Never blocks |
 
 ### Commands
 
 | Command | What it does |
 |---|---|
-| `/save-session` | Writes the goal, what's done and verified, what failed, what couldn't run, and what's next to `~/.claude/sessions/`. Updated at each milestone, and runs `/reflect` on the final save |
-| `/resume-session` | Reads a saved session file, summarizes it, and confirms the plan before continuing |
-| `/reflect` | Lists what went wrong this session, with evidence, and proposes the smallest fix at the right layer. Applies only what you approve |
+| [`/save-session`](commands/save-session.md) | Writes the goal, what's done and verified, what failed, what couldn't run, and what's next to `~/.claude/sessions/`. Updated at each milestone, and runs `/reflect` on the final save |
+| [`/resume-session`](commands/resume-session.md) | Reads a saved session file, summarizes it, and confirms the plan before continuing |
+| [`/reflect`](commands/reflect.md) | Lists what went wrong this session, with evidence, and proposes the smallest fix at the right layer. Applies only what you approve |
 
 ### Skills
 
 | Skill | Use it when |
 |---|---|
-| `plan-redteam` | A spec or plan is done. A fresh agent attacks it with evidence, you defend or concede, and you get an agreed change list |
-| `consult` | Choosing between options on something expensive or hard to reverse. Two blind agents each argue one side |
-| `branch-audit` | A big branch is about to ship. Parallel reviewer lanes (API surface, data path, conformance, deploy, client contract, privacy, omissions) feed one consolidated, verified list. Lane yield is tracked over time so weak lanes get cut |
-| `buy-vs-build` | You're about to hand-roll a queue, retry, cache, parser, auth or rate limiter. It checks installed deps first, then searches the web |
-| `testing-workflow` | Any behavior change: spec first, a failing repro test before a bug fix |
-| `doc-sync` | Behavior changes that have docs, diagrams or env vars attached |
-| `code-comment-policy` | Writing or reviewing comments. The default is none, and existing ones are treated as load-bearing |
-| `prompt-shake` | After editing a prompt file (CLAUDE.md, a skill, an agent). Tightens it so rules don't only grow |
-| `frontend-flow` | UI work. Chains Impeccable, Hallmark and the Android skills instead of picking one |
-| `parallel-ticket-delivery` | Several independent tickets, each shipped as its own PR by a parallel worktree agent. It proves file-disjointness first, writes one shared brief, reruns every agent's check, and reports to you only when a decision is needed |
+| [`plan-redteam`](skills/plan-redteam/SKILL.md) | A spec or plan is done. A fresh agent attacks it with evidence, you defend or concede, and you get an agreed change list |
+| [`consult`](skills/consult/SKILL.md) | Choosing between options on something expensive or hard to reverse. Two blind agents each argue one side |
+| [`branch-audit`](skills/branch-audit/SKILL.md) | A big branch is about to ship. Parallel reviewer lanes (API surface, data path, conformance, deploy, client contract, privacy, omissions) feed one consolidated, verified list. Lane yield is tracked over time so weak lanes get cut |
+| [`buy-vs-build`](skills/buy-vs-build/SKILL.md) | You're about to hand-roll a queue, retry, cache, parser, auth or rate limiter. It checks installed deps first, then searches the web |
+| [`testing-workflow`](skills/testing-workflow/SKILL.md) | Any behavior change: spec first, a failing repro test before a bug fix |
+| [`doc-sync`](skills/doc-sync/SKILL.md) | Behavior changes that have docs, diagrams or env vars attached |
+| [`code-comment-policy`](skills/code-comment-policy/SKILL.md) | Writing or reviewing comments. The default is none, and existing ones are treated as load-bearing |
+| [`prompt-shake`](skills/prompt-shake/SKILL.md) | After editing a prompt file (CLAUDE.md, a skill, an agent). Tightens it so rules don't only grow |
+| [`frontend-flow`](skills/frontend-flow/SKILL.md) | UI work. Chains Impeccable, Hallmark and the Android skills instead of picking one |
+| [`parallel-ticket-delivery`](skills/parallel-ticket-delivery/SKILL.md) | Several independent tickets, each shipped as its own PR by a parallel worktree agent. It proves file-disjointness first, writes one shared brief, reruns every agent's check, and reports to you only when a decision is needed |
 
 ### Agents
 
 | Agent | Role |
 |---|---|
-| `builder` | Implements one scoped change from a brief, runs its check, and reports in a fixed format (status, files, command, exit code, output) |
-| `explore-cheap` | Low-cost read-only codebase search that returns `file:line` answers, not file dumps |
-| `library-scout` | The outward research lane for `buy-vs-build`: verified candidates, never a verdict |
-| `consult-side` | Argues one side of a `consult` from a frozen brief |
-| `plan-redteam-lead` | The skeptical team lead for `plan-redteam` |
-| `nestjs-expert` | NestJS modules, DI, guards, interceptors, microservices |
-| `product-dreamer` | Product-vision research: ranked feature ideas, each with cited evidence, user moment, trust risk, cost and effort, plus patterns to steal and anti-patterns |
-| `hebrew-copywriter` | Native Israeli Hebrew for any medium (UI, video, decks, marketing, email, social, docs): rewrites translated-sounding drafts, keeps terms consistent, handles gendered address and mixed-direction text |
+| [`builder`](agents/builder.md) | Implements one scoped change from a brief, runs its check, and reports in a fixed format (status, files, command, exit code, output) |
+| [`explore-cheap`](agents/explore-cheap.md) | Low-cost read-only codebase search that returns `file:line` answers, not file dumps |
+| [`library-scout`](agents/library-scout.md) | The outward research lane for `buy-vs-build`: verified candidates, never a verdict |
+| [`consult-side`](agents/consult-side.md) | Argues one side of a `consult` from a frozen brief |
+| [`plan-redteam-lead`](agents/plan-redteam-lead.md) | The skeptical team lead for `plan-redteam` |
+| [`nestjs-expert`](agents/nestjs-expert.md) | NestJS modules, DI, guards, interceptors, microservices |
+| [`product-dreamer`](agents/product-dreamer.md) | Product-vision research: ranked feature ideas, each with cited evidence, user moment, trust risk, cost and effort, plus patterns to steal and anti-patterns |
+| [`hebrew-copywriter`](agents/hebrew-copywriter.md) | Native Israeli Hebrew for any medium (UI, video, decks, marketing, email, social, docs): rewrites translated-sounding drafts, keeps terms consistent, handles gendered address and mixed-direction text |
 
 ## Install
 
