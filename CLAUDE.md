@@ -42,6 +42,7 @@
 
 ## Ratchet (added 2026-09-01)
 - Every repeated correction becomes permanent infrastructure, fixed at the strongest layer available: in-chat correction < CLAUDE.md rule < hook/linter that blocks it (~/.claude/hooks/guard.sh). If I correct the same mistake a 3rd time, propose the hook conversion - the 4th time should never happen
+- A new rule in this file replaces or merges an existing one, or becomes a hook or a skill instead; this file does not grow (added 2026-11-11)
 - New rules added to this file get a date (YYYY-MM-DD). On review, delete rules a hook now enforces and reconcile contradictions (added 2026-09-02)
 
 ## Routing (added 2026-09-02)
