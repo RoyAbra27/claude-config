@@ -4,7 +4,13 @@
     "RTK_SUPPRESS_HOOK_WARNING": "1"
   },
   "permissions": {
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "deny": [
+      "Bash(git clean -f:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -144,7 +150,7 @@
   "effortLevel": "medium",
   "modelSettings": {
     "claude-fable-5-2": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
     }
   },
   "autoUpdatesChannel": "latest",
