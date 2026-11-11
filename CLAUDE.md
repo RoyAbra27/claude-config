@@ -5,7 +5,8 @@
 - **PDFs (added 2026-11-09):** use `uv run --script ~/.claude/scripts/docread.py file.pdf --out <scratch dir>` instead of bare markitdown; read the image grids it lists. Add `--tables` (Docling, slow) when exact tables matter.
 
 ## Debugging (CRITICAL)
-- Propose the diagnosis + fix plan for my approval BEFORE editing code
+- **Scale by risk (revised 2026-11-11):** a local bug on the first attempt gets repro, fix, rerun the repro. The full protocol (approval before editing, hypothesis ledger) starts after one failed fix attempt, or up front for production or data-loss bugs
+- Full protocol: propose the diagnosis + fix plan for my approval BEFORE editing code
 - **Repro gate (added 2026-11-09):** before hypothesizing, name one command (test, script, curl) you have already run that reproduces my exact symptom and can go green once fixed. No such command yet = building it is the first task
 - **Hypothesis ledger (added 2026-09-01, ranked 2026-11-09):** write 3-5 ranked hypotheses, each with the prediction that would falsify it, and show them to me before testing. Keep them as a `tested_hypotheses` list (hypothesis, evidence, verdict) in the session file (`~/.claude/sessions/`), updated after each attempt; check it before proposing the next attempt and never re-test a ruled-out hypothesis
 - **Bound the loop:** after 2 failed attempts at the same symptom, stop. Report the diagnosis and what you ruled out. A third variation is not a fix
@@ -32,7 +33,7 @@
 - **Always push back when you believe I'm not 100% right, timed by cost (split 2026-10-29).** An explicit, cheap, reversible request: do it, then state the concern in one line. Anything expensive or irreversible, or codifying my preference into rules/config/files: state your position and the evidence (2-4 lines) BEFORE acting; let me decide with the tradeoff visible. If I overrule after hearing the tradeoff, proceed without re-arguing
 
 ## Coding Conventions
-- **Ask or proceed (revised 2026-11-11):** ask only when the interpretation changes what gets built, or the step is expensive or hard to reverse. Otherwise pick one, name the choice in one line, and continue; never pick silently. On long runs, keep going while a step doesn't need me and put status notes next to the next action. This rule wins over plugin defaults that say "always ask first" or "never stall"
+- **Ask or proceed (revised 2026-11-11):** ask only when the interpretation changes what gets built. Otherwise pick one, name the choice in one line, and continue; never pick silently. On long runs, keep going while a step doesn't need me and put status notes next to the next action. This rule wins over plugin defaults that say "always ask first" or "never stall"
 - Prefer current docs and versions; check release dates instead of trusting memory
 
 ## Build for the User, Not the Demo
