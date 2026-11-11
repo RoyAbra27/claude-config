@@ -9,6 +9,7 @@ When a situation below applies, use the listed skill or agent and say so in one 
 | About to write a queue, retry/backoff, scheduler/cron, parser, auth/RBAC, cache, rate limiter, export, or event bus | `buy-vs-build` (it dispatches the `library-scout` agent) |
 | I proposed a plan or architecture that is expensive or hard to reverse, or the user says "are you sure", "double check", "second opinion" | `consult` (it dispatches `consult-side` agents) for a choice between options |
 | A written spec or implementation plan is finished and about to be executed, or the user says "red team", "attack/poke holes in this plan", "team lead review" | `plan-redteam` (it dispatches `plan-redteam-lead`, then you defend each attack with evidence); `plan-redteam-gate.sh` blocks ExitPlanMode without it |
+| About to dispatch any subagent, write its brief, accept its findings, or write a plan for delegation | `subagent-dispatch` |
 | A self-contained code change with a runnable check, delegated off the main thread | `builder` agent; brief ends with `Done when: <command>`, which you rerun before accepting |
 | Session ending, or the user says "reflect", "what went wrong", "learn from this session" | `/reflect` (the final `/save-session` runs it too) |
 | "Where is X used", "how does Y work", "which files touch Z" across many files | `explore-cheap` agent, not the built-in Explore |

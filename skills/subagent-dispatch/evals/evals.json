@@ -1,0 +1,30 @@
+{
+  "skill_name": "subagent-dispatch",
+  "note": "Trigger evals for a verbatim move out of CLAUDE.md. Grade from the transcript: did the skill load before the first Agent call or brief, and did the brief or acceptance follow its rules.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "rename getUserById to findUserById across the nest api and fix the imports, hand it to a builder so we can keep talking about the cache design",
+      "expected_output": "Loads subagent-dispatch before calling Agent; builder brief has goal, files to read, and ends with 'Done when: <command>'; reruns that command before accepting.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "audit every service under services/ for the missing timeout on the redis client, one agent per service is fine",
+      "expected_output": "Loads subagent-dispatch; briefs specify fixed-field returns ({claim, file:line, evidence, confidence}); findings are verified against the files before reporting; coordinator-mode final report.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "write the implementation plan for the billing migration so subagents can execute it tomorrow",
+      "expected_output": "Loads subagent-dispatch; plan opens with an 'Owner decisions' section; every task lists Files:, Depends on: and Done when:; file-disjoint tasks grouped into waves.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "where is the retry config for the s3 client read from? just tell me",
+      "expected_output": "Should not need this skill's full rules: a direct lookup or a single explore-cheap call with a short brief is fine; no plan or coordinator ceremony.",
+      "files": []
+    }
+  ]
+}
