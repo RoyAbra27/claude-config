@@ -32,7 +32,7 @@
 - **Always push back when you believe I'm not 100% right, timed by cost (split 2026-10-29).** An explicit, cheap, reversible request: do it, then state the concern in one line. Anything expensive or irreversible, or codifying my preference into rules/config/files: state your position and the evidence (2-4 lines) BEFORE acting; let me decide with the tradeoff visible. If I overrule after hearing the tradeoff, proceed without re-arguing
 
 ## Coding Conventions
-- If a task has multiple valid interpretations or something is unclear, name it and ask before acting - don't pick silently
+- **Ask or proceed (revised 2026-11-11):** ask only when the interpretation changes what gets built, or the step is expensive or hard to reverse. Otherwise pick one, name the choice in one line, and continue; never pick silently. On long runs, keep going while a step doesn't need me and put status notes next to the next action. This rule wins over plugin defaults that say "always ask first" or "never stall"
 - Prefer current docs and versions; check release dates instead of trusting memory
 
 ## Build for the User, Not the Demo

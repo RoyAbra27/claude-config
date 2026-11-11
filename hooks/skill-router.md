@@ -1,6 +1,6 @@
 ## Skill and agent router
 
-Before ANY response or action, including clarifying questions and "quick looks" at files, check this table. If a row matches even loosely, invoke that skill or dispatch that agent first, and announce it in one line: "Using <name> to <purpose>". Process skills (brainstorming, debugging, consult, buy-vs-build) come before implementation. Custom skills below sit alongside superpowers; the same "1% chance it applies, invoke it" rule covers both.
+When a situation below applies, use the listed skill or agent and say so in one line: "Using <name> to <purpose>". Process skills (brainstorming, debugging, consult, buy-vs-build) come before implementation. A quick question, lookup, or summary needs no skill. This table replaces the superpowers "1% chance, invoke it" rule.
 
 | Situation | Reach for |
 |---|---|
@@ -45,4 +45,3 @@ Red flags. These thoughts mean stop and check the table:
 | "I'll just grep for it quickly" | Fan-out search belongs in `explore-cheap`. Keep file dumps out of this context. |
 | "I edited CLAUDE.md, done" | Run `prompt-shake` on the diff. Rules only grow otherwise. |
 | "Tests probably pass" | Run them. Paste the output. Then say done. |
-| "This is too small for a skill" | Small tasks become large ones. Check the table anyway. |

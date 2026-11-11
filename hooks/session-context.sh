@@ -28,12 +28,12 @@ if [ "$SOURCE" = "startup" ] && [ -n "$LAST" ] && ! grep -q 'Reflection' "$LAST"
 fi
 
 # Added 2026-09-02: skill/agent router, injected every session start (incl. compact) the
-# same way the superpowers plugin injects using-superpowers; the wrapper tag is deliberate.
+# same way the superpowers plugin injects using-superpowers. Revised 2026-11-11: no
+# <EXTREMELY_IMPORTANT> wrapper; Claude 5 models over-apply shouted rules (claude.dev
+# context-engineering post, 2026-07-24).
 ROUTER="$HOOK_DIR/skill-router.md"
 if [ -f "$ROUTER" ]; then
   echo
-  echo "<EXTREMELY_IMPORTANT>"
   cat "$ROUTER"
-  echo "</EXTREMELY_IMPORTANT>"
 fi
 exit 0
