@@ -27,7 +27,7 @@ Before ANY response or action, including clarifying questions and "quick looks" 
 | Steps only the user can do (cloud console, secrets, CI setup, cutover) | `wizard` to generate a guided bash script, instead of a long prose checklist |
 | About to say "done", "fixed", "passing" | superpowers:verification-before-completion: run the command, paste the output |
 | New or edited skill | `skill-creator:skill-creator` (not superpowers:writing-skills), with `evals/evals.json` alongside it |
-| Drive or screenshot a web page | Playwright MCP for headless checks; `claude-in-chrome` only when the user's logged-in Chrome is needed |
+| Drive or screenshot a web page | `agent-browser` CLI via Bash for headless checks (`snapshot -i`, `close` when done); `claude-in-chrome` only when the user's logged-in Chrome is needed |
 | Break a plan or spec into dependency-ordered tickets | `to-tickets` |
 | Several independent tickets to ship as separate PRs, or a plan wave of 2+ file-disjoint tasks | `parallel-ticket-delivery`; propose it and confirm before dispatching (it runs several agents at once) |
 
