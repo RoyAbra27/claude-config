@@ -10,7 +10,7 @@
     },
     {
       "id": 2,
-      "prompt": "participants on staging say their nights stopped uploading after yesterday's release, the queue just grows",
+      "prompt": "customers on staging say their reports stopped syncing after yesterday's release, the job queue just grows",
       "expected_output": "Loads debugging-protocol; production and data-loss risk: full protocol up front - repro command named, 3-5 ranked hypotheses with falsifying predictions shown before testing, diagnosis and fix plan proposed for approval before editing.",
       "files": []
     },
@@ -22,7 +22,7 @@
     },
     {
       "id": 4,
-      "prompt": "explain how the upload retry backoff works in UploadScheduler",
+      "prompt": "explain how the sync retry backoff works in JobScheduler",
       "expected_output": "Should not trigger: an explanation request, not a bug.",
       "files": []
     }
