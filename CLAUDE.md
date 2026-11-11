@@ -9,14 +9,16 @@
 - **Repro gate (added 2026-11-09):** before hypothesizing, name one command (test, script, curl) you have already run that reproduces my exact symptom and can go green once fixed. No such command yet = building it is the first task
 - **Hypothesis ledger (added 2026-09-01, ranked 2026-11-09):** write 3-5 ranked hypotheses, each with the prediction that would falsify it, and show them to me before testing. Keep them as a `tested_hypotheses` list (hypothesis, evidence, verdict) in the session file (`~/.claude/sessions/`), updated after each attempt; check it before proposing the next attempt and never re-test a ruled-out hypothesis
 - **Bound the loop:** after 2 failed attempts at the same symptom, stop. Report the diagnosis and what you ruled out. A third variation is not a fix
-- **Temporary probes (added 2026-09-02):** tag every temporary log/probe with `DEBUG_MODE:` in its comment so cleanup is one grep; none may reach a commit
+- **Temporary probes (added 2026-09-02):** tag every temporary log/probe with `DEBUG_MODE:` in its comment so cleanup is one grep; none may reach a commit. Undo a temporary edit by restoring a backup copy or reversing that exact edit, never `git checkout -- <file>` on a file with uncommitted work (added 2026-11-10)
 
 ## Environment (CRITICAL - prevents wrong assumptions)
 - PowerShell profile is the path `$PROFILE` reports (~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1), not the stale OneDrive copy; oh-my-posh config is ~/.oh-my-posh/clean-detailed.omp.json
 - When running PowerShell commands from bash, use absolute Windows paths (C:\Users\USER\...) not $HOME
+- Any `!` command suggested to the user uses absolute paths: the session cwd moves between repos and worktrees (added 2026-11-11)
 - **Git Bash path rewriting (added 2026-10-29):** an argument starting with `/` that is not a file path (URL path, health-check path, route) gets rewritten to `C:/Program Files/Git/...`; prefix that command with `MSYS_NO_PATHCONV=1`. Never set it globally: it breaks `/c/...` paths passed to Windows programs
 - Run repo shell scripts with the Bash tool, never `bash` inside PowerShell: there it resolves to the WSL launcher (added 2026-10-29)
 - Before re-running a stopped test or smoke suite, kill leftover `node`/`python` children (`taskkill //F //T //PID <pid>`); results from a run that overlapped stale processes are invalid (added 2026-10-29)
+- Git Bash heredocs break on Hebrew text ("unexpected EOF") and mangle backslash escapes (a regex `\b` or `\1` becomes a control character): write any script with Hebrew, regex or backslashes to a file with the Write tool and run the file (added 2026-11-10)
 
 ## Git Workflow
 - Use conventional commits (feat:, fix:, refactor:, docs:, test:, chore:)
@@ -36,7 +38,7 @@
 ## Build for the User, Not the Demo
 - Before building any user-facing feature/tool, state the user's loop in 1-3 lines: who, when, what they decide with it. Design backwards from that.
 - Every derived number, score, or chart must have a one-line "this tells the user X, so they do Y". Can't write it? Cut it.
-- State the realistic scale (N x frequency) and what breaks first, even if you don't build for it.
+- State the realistic scale (N x frequency) and what breaks first, even if you don't build for it. For a new call to an outside service on a page load, name its latency and check whether the server already holds the data, before it goes into a brief (added 2026-11-10)
 - No two views/endpoints showing overlapping data; merge or delete.
 
 ## Verification
@@ -57,7 +59,7 @@
 - **Treat subagent-reported findings (reviews, audits, research) as unverified hypotheses.** Before acting on or reporting a finding, verify it against the primary source: the actual file at the relevant ref (`git show <ref>:<path>`, not the working tree), upstream docs/action.yml at the pinned version, or a direct empirical test (a one-liner often settles language/CLI semantics definitively)
 - For git-history claims, require the agent to state the exact ref comparison it used (`git log A..B` direction matters); a "the PR removes X" finding where X is actually being added is the signature of a backwards diff
 - **Structured returns (added 2026-09-01):** the brief must specify the return format as fixed fields, not prose - e.g. findings as `{claim, file:line, evidence, confidence}`. A return that doesn't match the format gets re-requested; verification then targets the `evidence` field directly instead of re-reading a prose report
-- **Builder handoff (added 2026-11-09):** one-off delegated code changes go to the `builder` agent (subagent-driven-development and parallel-ticket-delivery use their own templates). The brief names its goal, the files to read, and ends with `Done when: <command>`. Before accepting the work, rerun that command myself; if it fails, send it back with the failure attached
+- **Builder handoff (added 2026-11-09):** one-off delegated code changes go to the `builder` agent (subagent-driven-development and parallel-ticket-delivery use their own templates). The brief names its goal, the files to read, and ends with `Done when: <command>`. Before accepting the work, rerun that command myself; if it fails, send it back with the failure attached. When several builders share one checkout, scope any `git status` check in a Done-when to that builder's own paths (added 2026-11-10)
 - **Coordinator mode (added 2026-11-09):** when subagents do the work (subagent-driven-development, parallel-ticket-delivery, any fan-out), I talk to you as the one coordinator and don't narrate agents. Between dispatch and the final report, message you only for a decision only you can make or a blocker past the fix cap, batched into one message. In-scope judgment calls I make myself and log in the run's ledger. Final report in attention order: decisions needed, then failed or parked items, then done work with PR links or commits, then every judgment call I made
 - **Plans meant for delegation (added 2026-11-09):** a multi-phase plan written for subagent execution opens with an "Owner decisions" section that you answer before execution starts, so the run doesn't stop midway. Every task lists `Files:`, `Depends on:` and `Done when: <command>`. Tasks with disjoint files and no dependency between them are grouped into waves; a wave of 2+ can go to parallel-ticket-delivery, and everything else runs sequentially under subagent-driven-development
 
