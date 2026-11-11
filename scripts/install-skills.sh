@@ -18,7 +18,6 @@ CATALOG=(
   "improve-codebase-architecture|find refactor opportunities (mattpocock)|$sk mattpocock/skills --skill improve-codebase-architecture ${T[*]}"
   "to-tickets|plan to dependency-ordered tickets (mattpocock)|$sk mattpocock/skills --skill to-tickets ${T[*]}"
   "wizard|guided bash scripts for manual steps (mattpocock)|$sk mattpocock/skills --skill wizard ${T[*]}"
-  "setup-matt-pocock-skills|per-repo setup for the mattpocock skills|$sk mattpocock/skills --skill setup-matt-pocock-skills ${T[*]}"
   "android-material3-design-system|Material 3 theming for Android|$sk krutikJain/android-agent-skills --skill android-material3-design-system ${T[*]}"
   "android-viewsystem-foundations|XML layouts, Fragments, classic Android UI|$sk krutikJain/android-agent-skills --skill android-viewsystem-foundations ${T[*]}"
   "developing-with-streamlit|Streamlit apps|$sk streamlit/agent-skills --skill developing-with-streamlit ${T[*]}"
