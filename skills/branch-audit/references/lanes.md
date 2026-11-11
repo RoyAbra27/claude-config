@@ -46,7 +46,7 @@ A senior engineer on the client platform(s) reads the guide and examples as the 
 - Proposed fixes as engineering steps (a command, a lifecycle rule, a runbook section), not policy essays.
 
 ## omissions (always)
-Not bugs in existing code: what is ABSENT that a mature team would have built or decided. Walk the system's life on several axes (a user's first day to withdrawal; a request end to end; deploy day, first incident, first schema/format change, 10x scale, a year later; who is on call; money; the clock; the human operators) and ask "what happens / who notices / what did we decide". Severity reflects real consequence at the system's realistic scale; include `## Considered and not worth it` and up to 10 ranked `## Suggestions` with cost S/M/L.
+Not bugs in existing code: what is ABSENT that a mature team would have built or decided. Walk the system's life on several axes (a user's first day to withdrawal; a request end to end; deploy day, first incident, first schema/format change, 10x scale, a year later; who is on call; money; the clock; the human operators; the second pass through a flow, when the user changes their mind after the result: add, remove, redo, undo) and ask "what happens / who notices / what did we decide". Severity reflects real consequence at the system's realistic scale; include `## Considered and not worth it` and up to 10 ranked `## Suggestions` with cost S/M/L.
 Tell it which lanes exist so it skips their ground, and give it one example of the kind of thing wanted (a header nobody asked for, a backup nobody decided).
 
 ## Candidates not in the default set

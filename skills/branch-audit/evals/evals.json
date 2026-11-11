@@ -8,7 +8,7 @@
       "expected_output": "Packages the branch once (filtered diff file outside the repo) and a known-open list; writes one shared brief from the template; dispatches the always-on lanes (api-surface, data-path, conformance, deploy, omissions) in ONE message on Opus in the background, adding client-contract/privacy only if the branch warrants; relays each lane's Important titles as it returns; dispatches one consolidator; verifies top items at file:line itself; asks USER-DECISION items via AskUserQuestion with a recommendation first; no code edited before the user decides; one fix wave then one scoped re-review.",
       "files": [],
       "assertions": [
-        "branch diff package written to a file outside the repo, lockfiles/generated files excluded",
+        "branch diff package written to a git-ignored or temp workspace, never a tracked path, lockfiles/generated files excluded",
         "shared brief file written and contains the hard rules (read-only, no state-resetting tests, no subagents) and the finding format",
         "brief contains a known-open-items list (or states there is none)",
         "all lanes dispatched in a single message with model opus and run_in_background",
@@ -41,16 +41,52 @@
         "no branch-audit lanes dispatched",
         "small-diff review path used instead"
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "i need you to do a over the top audit of the plan, goals, execution and future plans. make sure the tool is perfect to use before deploying it. dont ask me questions. (Repo git-ignores .superpowers/. While the lanes run, the controller changes a shared function that one fix unit depends on. Mid-run the user asks when they can clear the context.)",
+      "expected_output": "Keeps every audit file (brief, lane files, merged file) in .superpowers/audit-<date>/ so a /clear loses nothing. The omissions lane prompt includes the second-pass axis (change of mind after the result: add, remove, redo, undo). Before dispatching fix units, the controller re-checks each unit's conflicts and Done-when against HEAD because it changed code after the consolidation.",
+      "files": [],
+      "assertions": [
+        "audit workspace is under .superpowers/ (git-ignored), not only the session scratchpad",
+        "omissions lane prompt names the second pass through a flow (add, remove, redo, undo after the result)",
+        "fix-unit briefs dispatched after a controller code change mention that change or carry an updated Done-when",
+        "no audit file written to a tracked path"
+      ]
     }
   ],
   "trigger_evals": [
-    {"query": "branch is 40 commits, touches auth and the db, I want every kind of reviewer on it before merge", "should_trigger": true},
-    {"query": "do a full audit of feat/billing before we deploy, security + architecture + whatever else you think", "should_trigger": true},
-    {"query": "what did we miss on this branch? run a bunch of agents over it", "should_trigger": true},
-    {"query": "sdd finished all 14 tasks, run the final review but make it a deep one with multiple opus reviewers", "should_trigger": true},
-    {"query": "review my PR #212 for correctness", "should_trigger": false},
-    {"query": "red team the implementation plan in docs/plans/payments.md before we start", "should_trigger": false},
-    {"query": "is this function over-engineered? src/utils/retry.ts", "should_trigger": false},
-    {"query": "audit the whole repo for bloat and things to delete", "should_trigger": false}
+    {
+      "query": "branch is 40 commits, touches auth and the db, I want every kind of reviewer on it before merge",
+      "should_trigger": true
+    },
+    {
+      "query": "do a full audit of feat/billing before we deploy, security + architecture + whatever else you think",
+      "should_trigger": true
+    },
+    {
+      "query": "what did we miss on this branch? run a bunch of agents over it",
+      "should_trigger": true
+    },
+    {
+      "query": "sdd finished all 14 tasks, run the final review but make it a deep one with multiple opus reviewers",
+      "should_trigger": true
+    },
+    {
+      "query": "review my PR #212 for correctness",
+      "should_trigger": false
+    },
+    {
+      "query": "red team the implementation plan in docs/plans/payments.md before we start",
+      "should_trigger": false
+    },
+    {
+      "query": "is this function over-engineered? src/utils/retry.ts",
+      "should_trigger": false
+    },
+    {
+      "query": "audit the whole repo for bloat and things to delete",
+      "should_trigger": false
+    }
   ]
 }

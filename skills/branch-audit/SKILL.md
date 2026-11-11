@@ -12,7 +12,7 @@ Cost: about 130-230k tokens per lane on Opus, ~1-1.5M per audit. Say so before d
 ## Workflow
 
 ### 1. Package the branch
-- `MERGE_BASE=$(git merge-base <base-branch> HEAD)`. Write one file with the commit list, `--stat`, and `-U10` diff, excluding lockfiles and generated files (`':!*.lock' ':!**/package-lock.json' ':!**/openapi.json' ':!**/*.d.ts'` and the like). Put it in the session scratchpad or another temp dir, never in the repo.
+- `MERGE_BASE=$(git merge-base <base-branch> HEAD)`. Write one file with the commit list, `--stat`, and `-U10` diff, excluding lockfiles and generated files (`':!*.lock' ':!**/package-lock.json' ':!**/openapi.json' ':!**/*.d.ts'` and the like). Put it and every later audit file in one workspace that survives a `/clear`: `.superpowers/audit-<date>/` when the repo git-ignores `.superpowers/`, otherwise the session scratchpad. Never a tracked path.
 - Collect the **known-open list**: binding user rulings not yet implemented, parked or deferred findings, must-fix items from earlier reviews (from the SDD ledger if there is one). Lanes report the *status* of these, they do not rediscover them.
 
 ### 2. Freeze the shared brief
@@ -32,6 +32,7 @@ When all lanes are back, dispatch one Opus consolidator with `references/consoli
 
 ### 6. One fix wave, one re-review
 - Write a fix brief: scope = FIX-CODE + FIX-DOCS + decided items; explicitly out of scope = DEFER, DROP, undecided. One implementer (Opus), tests first, commit per work unit, data-loss units first.
+- If you changed code yourself after the consolidation, re-check each unit's conflicts and Done-when against HEAD before dispatching it.
 - Then one scoped re-review of the fix range against the item list. Residuals get adjudicated, not a second wave.
 
 ### 7. Feed the skill

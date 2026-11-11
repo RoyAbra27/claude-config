@@ -97,3 +97,16 @@ Lanes (lean, user choice): conformance, data-path (adapted to the trust path fro
 | data-path | 9 | 3 | 6 | 2 |
 | omissions | 9 | 0 | 9 | 0 |
 Notes: a read-only probe script in the data-path lane found two invented-number paths the per-task reviews missed; for display-of-numbers branches, tell data-path to probe every figure shown. Omissions caught a deploy runbook that fails when followed literally.
+
+## 2026-11-10 Project B, whole product before first deploy (6 lanes adapted to the product: cart-trust, background, conformance, deploy, omissions, ux; plus controller items; security out of scope)
+85 raw -> 82 merged (31 FIX-CODE, 23 FIX-DOCS, 5 USER-DECISION, 17 DEFER, 6 DROP), 1 Critical.
+| Lane | Raw | Dup | Unique verified | Unique Important+ | Dropped |
+|---|---|---|---|---|---|
+| cart-trust (data-path, adapted) | 10 | 2 | 10 | 6 | 0 |
+| background (jobs, locks, outages) | 10 | 2 | 10 | 3 | 0 |
+| conformance | 18 | 2 | 17 | 3 | 2 |
+| deploy | 15 | 2 | 15 | 1 | 3 |
+| omissions | 11 | 3 | 11 | 2 | 0 |
+| ux | 20 | 2 | 20 (most partial: screenshots) | 4 | 1 |
+| controller | 1 | 1 | 1 | 0 | 0 |
+Notes: the adapted data-path lane earned most again, with runnable probes that made re-verification cheap (wrong-amount and wrong-number paths). A background lane found the only lock-starvation and provider-outage paths; a ux lane found trust-wording and recovery-flow problems no code lane looks at: both are worth adding for a product with scheduled jobs and a phone UI. Conformance and deploy were mostly doc hygiene on a whole-product pass (two findings changed what ships). All six lanes missed that a second pass through the main flow reset the user's earlier choices; the user found it by asking (the omissions axis for it was added the same day). One fix unit came back blocked because the controller had changed code after consolidation and its Done-when no longer matched.
