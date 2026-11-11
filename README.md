@@ -72,7 +72,6 @@ bootstrap.sh       new-machine setup
 | [`buy-vs-build`](skills/buy-vs-build/SKILL.md) | You're about to hand-roll a queue, retry, cache, parser, auth or rate limiter. It checks installed deps first, then searches the web |
 | [`testing-workflow`](skills/testing-workflow/SKILL.md) | Any behavior change: spec first, a failing repro test before a bug fix |
 | [`doc-sync`](skills/doc-sync/SKILL.md) | Behavior changes that have docs, diagrams or env vars attached |
-| [`code-comment-policy`](skills/code-comment-policy/SKILL.md) | Writing or reviewing comments. The default is none, and existing ones are treated as load-bearing |
 | [`prompt-shake`](skills/prompt-shake/SKILL.md) | After editing a prompt file (CLAUDE.md, a skill, an agent). Tightens it so rules don't only grow |
 | [`frontend-flow`](skills/frontend-flow/SKILL.md) | UI work. Chains Impeccable, Hallmark and the Android skills instead of picking one |
 | [`parallel-ticket-delivery`](skills/parallel-ticket-delivery/SKILL.md) | Several independent tickets, each shipped as its own PR by a parallel worktree agent. It proves file-disjointness first, writes one shared brief, reruns every agent's check, and reports to you only when a decision is needed |

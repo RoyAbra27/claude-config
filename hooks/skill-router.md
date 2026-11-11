@@ -16,7 +16,6 @@ When a situation below applies, use the listed skill or agent and say so in one 
 | NestJS module, DI, guard, interceptor, pipe, microservice design | `nestjs-expert` agent |
 | Product ideas, "what would make this 10x", "dream up features", competitor or UX research for a roadmap | `product-dreamer` agent; `anthropic-skills:deep-research` instead for a broad multi-source report outside one product |
 | Drafting or translating any Hebrew text people will read (UI strings, video, deck, marketing, email, social, docs) | `hebrew-copywriter` agent, before it ships |
-| Writing a comment, or a refactor/move over commented code | `code-comment-policy` (existing comments are load-bearing; never drop them silently) |
 | Behavior change near feature docs, diagrams, state machines, env vars | `doc-sync` in the same change |
 | Just edited CLAUDE.md, a SKILL.md, an agent, a hook, or this file | `prompt-shake` on the diff |
 | Reviewing a diff | `ponytail-review` for over-engineering, `/simplify` to apply cleanups, `/code-review` for correctness. Pick the one the request names or implies; run several only when the user asks. superpowers:requesting-code-review only as the review step inside subagent-driven-development. Any review-and-fix loop: when a bug class is flagged, fix every instance, not just the cited line; after the first full pass re-review only the new diff; after 3 rounds stop and question the approach instead of patching again (added 2026-11-11) |
@@ -42,7 +41,6 @@ Red flags. These thoughts mean stop and check the table:
 |---|---|
 | "It's a 30-line retry/queue/cache, faster to just write it" | That is exactly the case `buy-vs-build` exists for. Installed deps first, then search. |
 | "The plan looks solid, no need for a second opinion" | The author cannot grade its own plan. A fork between options means `consult`; a finished plan about to be executed means `plan-redteam`. |
-| "That comment looks redundant, I'll drop it while I'm here" | Existing comments are load-bearing. Flag it, never delete it silently. |
 | "I'll just grep for it quickly" | Fan-out search belongs in `explore-cheap`. Keep file dumps out of this context. |
 | "I edited CLAUDE.md, done" | Run `prompt-shake` on the diff. Rules only grow otherwise. |
 | "Tests probably pass" | Run them. Paste the output. Then say done. |
