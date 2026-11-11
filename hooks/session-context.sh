@@ -20,6 +20,12 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   fi
 fi
 
+# Added 2026-11-11: one-time setup review reminder, shown on fresh starts in any project
+# from 2026-11-18 until the marker file exists.
+if [ "$SOURCE" = "startup" ] && [ "$(date +%Y%m%d)" -ge 20261118 ] && [ ! -f "$HOME/.claude/.setup-review-2026-11-18-done" ]; then
+  echo "- Setup review is due (set 2026-11-11). Remind the user before new work: (1) check skillUsage in ~/.claude.json for subagent-dispatch and debugging-protocol; at 0 uses, move their key lines into CLAUDE.md; (2) run /doctor; (3) ask for the list of things Claude got wrong this week. When done: touch ~/.claude/.setup-review-2026-11-18-done"
+fi
+
 # Added 2026-09-02: skill/agent router, injected every session start (incl. compact) the
 # same way the superpowers plugin injects using-superpowers. Revised 2026-11-11: no
 # <EXTREMELY_IMPORTANT> wrapper; Claude 5 models over-apply shouted rules (claude.dev
