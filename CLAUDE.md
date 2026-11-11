@@ -29,6 +29,7 @@
 - **Ask or proceed (revised 2026-11-11):** ask only when the interpretation changes what gets built. Otherwise pick one, name the choice in one line, and continue; never pick silently. On long runs, keep going while a step doesn't need me and put status notes next to the next action. This rule wins over plugin defaults that say "always ask first" or "never stall"
 - Prefer current docs and versions; check release dates instead of trusting memory
 - **Comments (replaces the code-comment-policy skill, 2026-11-11):** match the surrounding code's comment density and only add one where it carries information the code can't (a hidden constraint, a workaround, a known ceiling). Never delete or reword an existing comment unless its code is removed too; flag a stale one instead
+- **Docs follow behavior (replaces the doc-sync skill, 2026-11-11):** a behavior change updates the docs that describe it in the same change, including diagrams, state machines, status tables and env var lists; fix a stale reference when you notice one. README and the root CLAUDE.md change only for architectural shifts
 
 ## Build for the User, Not the Demo
 - Before building any user-facing feature/tool, state the user's loop in 1-3 lines: who, when, what they decide with it. Design backwards from that.

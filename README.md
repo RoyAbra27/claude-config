@@ -71,7 +71,6 @@ bootstrap.sh       new-machine setup
 | [`branch-audit`](skills/branch-audit/SKILL.md) | A big branch is about to ship. Parallel reviewer lanes (API surface, data path, conformance, deploy, client contract, privacy, omissions) feed one consolidated, verified list. Lane yield is tracked over time so weak lanes get cut |
 | [`buy-vs-build`](skills/buy-vs-build/SKILL.md) | You're about to hand-roll a queue, retry, cache, parser, auth or rate limiter. It checks installed deps first, then searches the web |
 | [`testing-workflow`](skills/testing-workflow/SKILL.md) | Any behavior change: spec first, a failing repro test before a bug fix |
-| [`doc-sync`](skills/doc-sync/SKILL.md) | Behavior changes that have docs, diagrams or env vars attached |
 | [`prompt-shake`](skills/prompt-shake/SKILL.md) | After editing a prompt file (CLAUDE.md, a skill, an agent). Tightens it so rules don't only grow |
 | [`frontend-flow`](skills/frontend-flow/SKILL.md) | UI work. Chains Impeccable, Hallmark and the Android skills instead of picking one |
 | [`parallel-ticket-delivery`](skills/parallel-ticket-delivery/SKILL.md) | Several independent tickets, each shipped as its own PR by a parallel worktree agent. It proves file-disjointness first, writes one shared brief, reruns every agent's check, and reports to you only when a decision is needed |
