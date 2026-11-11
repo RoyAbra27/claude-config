@@ -5,13 +5,13 @@ When a situation below applies, use the listed skill or agent and say so in one 
 | Situation | Reach for |
 |---|---|
 | New feature, behavior change, "let's build X", "add an endpoint/module/flow" | superpowers:brainstorming first; `buy-vs-build` the moment a known category appears; `testing-workflow` (spec first) before implementation |
-| Bug, failing test, unexpected behavior, "it doesn't work" | Scaled by risk per CLAUDE.md Debugging: first attempt is repro, fix, rerun; superpowers:systematic-debugging with the hypothesis ledger after a failed fix or on production bugs; probes tagged `DEBUG_MODE:`; then `testing-workflow` (failing repro test), then verification-before-completion |
+| Bug, failing test, unexpected behavior, "it doesn't work" | `debugging-protocol` first (scaled by risk); superpowers:systematic-debugging once its full protocol applies; then `testing-workflow` (failing repro test), then verification-before-completion |
 | About to write a queue, retry/backoff, scheduler/cron, parser, auth/RBAC, cache, rate limiter, export, or event bus | `buy-vs-build` (it dispatches the `library-scout` agent) |
 | I proposed a plan or architecture that is expensive or hard to reverse, or the user says "are you sure", "double check", "second opinion" | `consult` (it dispatches `consult-side` agents) for a choice between options |
 | A written spec or implementation plan is finished and about to be executed, or the user says "red team", "attack/poke holes in this plan", "team lead review" | `plan-redteam` (it dispatches `plan-redteam-lead`, then you defend each attack with evidence); `plan-redteam-gate.sh` blocks ExitPlanMode without it |
 | About to dispatch any subagent, write its brief, accept its findings, or write a plan for delegation | `subagent-dispatch` |
 | A self-contained code change with a runnable check, delegated off the main thread | `builder` agent; brief ends with `Done when: <command>`, which you rerun before accepting |
-| Session ending, or the user says "reflect", "what went wrong", "learn from this session" | `/reflect` (the final `/save-session` runs it too) |
+| The user says "reflect", "what went wrong", "learn from this session" | `/reflect` (the final `/save-session` runs it too) |
 | "Where is X used", "how does Y work", "which files touch Z" across many files | `explore-cheap` agent, not the built-in Explore |
 | NestJS module, DI, guard, interceptor, pipe, microservice design | `nestjs-expert` agent |
 | Product ideas, "what would make this 10x", "dream up features", competitor or UX research for a roadmap | `product-dreamer` agent; `anthropic-skills:deep-research` instead for a broad multi-source report outside one product |
@@ -19,7 +19,7 @@ When a situation below applies, use the listed skill or agent and say so in one 
 | Writing a comment, or a refactor/move over commented code | `code-comment-policy` (existing comments are load-bearing; never drop them silently) |
 | Behavior change near feature docs, diagrams, state machines, env vars | `doc-sync` in the same change |
 | Just edited CLAUDE.md, a SKILL.md, an agent, a hook, or this file | `prompt-shake` on the diff |
-| Reviewing a diff | `ponytail-review` for over-engineering, `/simplify` to apply cleanups, `/code-review` for correctness. Pick the one the request names or implies; run several only when the user asks. superpowers:requesting-code-review only as the review step inside subagent-driven-development |
+| Reviewing a diff | `ponytail-review` for over-engineering, `/simplify` to apply cleanups, `/code-review` for correctness. Pick the one the request names or implies; run several only when the user asks. superpowers:requesting-code-review only as the review step inside subagent-driven-development. Any review-and-fix loop: when a bug class is flagged, fix every instance, not just the cited line; after the first full pass re-review only the new diff; after 3 rounds stop and question the approach instead of patching again (added 2026-11-11) |
 | A large branch (15+ commits, or auth/personal data/infra/public API) is about to merge or ship, or the user says "full audit", "massive review", "what did we miss", "multiple reviewers" | `branch-audit` (parallel Opus lanes, one consolidator, user decisions, one fix wave); add `security-audit` as the security lane when auth, personal data or a public API is touched |
 | Security question, focused vuln review, "pen test", "security audit" of a codebase | `security-audit` (Cloudflare; token heavy); `/security-review` for just the pending diff |
 | Architecture or flow diagram, ERD, sequence, or a one-page explainer to share | `archify` |

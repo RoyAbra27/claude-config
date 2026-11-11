@@ -20,13 +20,6 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   fi
 fi
 
-# Added 2026-11-09: catch sessions that ended without /reflect. Startup only, so resume and
-# compact of the same session do not nag.
-LAST=$(ls -t "${SESSIONS_DIR:-$HOME/.claude/sessions}"/*.md 2>/dev/null | head -1)
-if [ "$SOURCE" = "startup" ] && [ -n "$LAST" ] && ! grep -q 'Reflection' "$LAST"; then
-  echo "- Last session file has no Reflection section: $LAST. Offer to run /reflect on it before new work."
-fi
-
 # Added 2026-09-02: skill/agent router, injected every session start (incl. compact) the
 # same way the superpowers plugin injects using-superpowers. Revised 2026-11-11: no
 # <EXTREMELY_IMPORTANT> wrapper; Claude 5 models over-apply shouted rules (claude.dev

@@ -1,0 +1,30 @@
+{
+  "skill_name": "debugging-protocol",
+  "note": "Trigger and scaling evals for the debugging rules moved out of CLAUDE.md on 2026-11-11. Grade from the transcript: did the skill load before the first proposed cause or edit, and did the process match the risk tier.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "vitest fails on src/cart/merge.test.ts since my last commit, expected 3 items got 2. fix it",
+      "expected_output": "Loads debugging-protocol; local first-attempt bug: runs the failing test as the repro, fixes, reruns it green. No approval round or hypothesis ledger up front.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "participants on staging say their nights stopped uploading after yesterday's release, the queue just grows",
+      "expected_output": "Loads debugging-protocol; production and data-loss risk: full protocol up front - repro command named, 3-5 ranked hypotheses with falsifying predictions shown before testing, diagnosis and fix plan proposed for approval before editing.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "your fix for the merge test didn't work, it still fails the same way",
+      "expected_output": "Loads debugging-protocol; after one failed attempt switches to the full protocol: hypothesis ledger, checks it before the next attempt, stops after the second failed attempt and reports what was ruled out.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "explain how the upload retry backoff works in UploadScheduler",
+      "expected_output": "Should not trigger: an explanation request, not a bug.",
+      "files": []
+    }
+  ]
+}

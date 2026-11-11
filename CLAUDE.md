@@ -4,14 +4,6 @@
 - For binary/rich docs (PDF, docx, pptx, xlsx, images, audio, HTML, EPub), convert with the globally-installed `markitdown` CLI before reading, to save tokens: `markitdown file.pdf -o out.md`, then read `out.md`. Skip it for plain text/code - read those directly.
 - **PDFs (added 2026-11-09):** use `uv run --script ~/.claude/scripts/docread.py file.pdf --out <scratch dir>` instead of bare markitdown; read the image grids it lists. Add `--tables` (Docling, slow) when exact tables matter.
 
-## Debugging (CRITICAL)
-- **Scale by risk (revised 2026-11-11):** a local bug on the first attempt gets repro, fix, rerun the repro. The full protocol (approval before editing, hypothesis ledger) starts after one failed fix attempt, or up front for production or data-loss bugs
-- Full protocol: propose the diagnosis + fix plan for my approval BEFORE editing code
-- **Repro gate (added 2026-11-09):** before hypothesizing, name one command (test, script, curl) you have already run that reproduces my exact symptom and can go green once fixed. No such command yet = building it is the first task
-- **Hypothesis ledger (added 2026-09-01, ranked 2026-11-09):** write 3-5 ranked hypotheses, each with the prediction that would falsify it, and show them to me before testing. Keep them as a `tested_hypotheses` list (hypothesis, evidence, verdict) in the session file (`~/.claude/sessions/`), updated after each attempt; check it before proposing the next attempt and never re-test a ruled-out hypothesis
-- **Bound the loop:** after 2 failed attempts at the same symptom, stop. Report the diagnosis and what you ruled out. A third variation is not a fix
-- **Temporary probes (added 2026-09-02):** tag every temporary log/probe with `DEBUG_MODE:` in its comment so cleanup is one grep; none may reach a commit. Undo a temporary edit by restoring a backup copy or reversing that exact edit, never `git checkout -- <file>` on a file with uncommitted work (added 2026-11-10)
-
 ## Environment (CRITICAL - prevents wrong assumptions)
 - PowerShell profile is the path `$PROFILE` reports (~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1), not the stale OneDrive copy; oh-my-posh config is ~/.oh-my-posh/clean-detailed.omp.json
 - When running PowerShell commands from bash, use absolute Windows paths (C:\Users\USER\...) not $HOME
@@ -29,6 +21,7 @@
 ## Communication Style
 - Number multi-step tasks so they're easy to follow
 - End responses with one concrete next step (when there is one; skip if the task is fully done)
+- **Length (added 2026-11-11):** Concise output style sets how much prose I write. Ponytail's "at most three lines" covers explaining code only; what this file asks me to state (user loop, scale, plan, evidence for a done claim) still gets stated, briefly
 - No em-dashes in any file you write or edit (guard.sh blocks them); use a hyphen. Chat is exempt
 - **Always push back when you believe I'm not 100% right, timed by cost (split 2026-10-29).** An explicit, cheap, reversible request: do it, then state the concern in one line. Anything expensive or irreversible, or codifying my preference into rules/config/files: state your position and the evidence (2-4 lines) BEFORE acting; let me decide with the tradeoff visible. If I overrule after hearing the tradeoff, proceed without re-arguing
 
@@ -59,15 +52,8 @@
 - Never bare `pip install`: in a uv project (`pyproject.toml` + `uv.lock`) use `uv add`; `uv pip install` only where there is no lockfile (added 2026-10-26)
 
 ## Session Management
-- Use /save-session at milestones and before ending to preserve progress for next time (live-state rule: update the session file merge-style at each milestone, not only at the end)
+- **Revised 2026-11-11:** auto-memory keeps durable facts. A long run keeps a `TASKS.md` checklist in the repo (tick items, add what you find) so state survives compaction. Use /save-session only for work that continues in a later session, at the point you stop
 
 ## RTK - prefix high-output commands only
-`rtk <cmd>` filters noisy CLI output; unknown commands pass through unchanged. Use it ONLY where output is genuinely large:
-- `rtk tsc ...` / `rtk lint ...` - errors grouped by file
-- `rtk npx jest ...` / `rtk npm run <script>` / `rtk test <cmd>` - failures only
-- `rtk prisma ...` - strips ASCII art
-- `rtk git diff|show|log` and `rtk gh pr view|diff|checks`, `rtk gh run view|list` - compact diffs/PR views
-- `rtk docker logs <c>` / `rtk log <file>` - deduplicated logs
-- `rtk err <cmd>` - errors only from any command
-
-Skip it for `git status/add/commit/push/pull` (savings are noise), never use `rtk grep/read/ls/find` (Grep/Read/Glob are already compact), and never run `rtk init -g` (its hook rewrites every Bash command).
+- `rtk <cmd>` filters noisy output (unknown commands pass through). Use it only where output is large: `tsc`, `lint`, `npx jest`, `npm run <script>`, `test <cmd>`, `prisma`, `git diff|show|log`, `gh pr view|diff|checks`, `gh run view|list`, `docker logs`, `log <file>`, and `err <cmd>` for errors only
+- Not for `git status/add/commit/push/pull` or `grep/read/ls/find`; never run `rtk init -g` (its hook rewrites every Bash command)
