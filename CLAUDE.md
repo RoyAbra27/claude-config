@@ -54,9 +54,6 @@
 ## Routing (added 2026-09-02)
 - Which skill or agent fires for which situation lives in `~/.claude/hooks/skill-router.md`, injected at every session start by `session-context.sh`. When adding or renaming a skill or agent, update that table in the same change.
 
-## Subagent Dispatch
-- Before dispatching any subagent, writing its brief, or accepting what it reports, load the `subagent-dispatch` skill (moved 2026-11-11)
-
 ## What NOT to Do
 - Don't create README or documentation files unless asked
 - Never bare `pip install`: in a uv project (`pyproject.toml` + `uv.lock`) use `uv add`; `uv pip install` only where there is no lockfile (added 2026-10-26)
