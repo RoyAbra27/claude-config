@@ -33,7 +33,7 @@ The router picks these automatically. You mostly answer questions and read one r
 ## What's inside
 
 ```
-CLAUDE.md          global instructions: debugging protocol, git, verification, subagent dispatch, rtk usage
+CLAUDE.md          global instructions: environment quirks, git, communication, coding conventions, verification, ratchet, routing, rtk usage
 settings.json      hooks, env, auto-mode allow/deny rules, plugins, status line
 hooks/             guard, gates and session context (see below)
 skills/            custom skills
@@ -49,10 +49,12 @@ bootstrap.sh       new-machine setup
 
 | Hook | When | What it does |
 |---|---|---|
-| [`guard.sh`](hooks/guard.sh) | before Edit, Write, Bash | Blocks `rm -rf` (except SDD scratch under `.superpowers/sdd/`), force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files and lockfiles, and em-dashes. Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
-| [`plan-redteam-gate.sh`](hooks/plan-redteam-gate.sh) | before ExitPlanMode | Blocks executing a plan until it has had a red-team pass (or an explicit, reasoned opt-out) |
-| [`session-context.sh`](hooks/session-context.sh) | session start, resume, compact | Injects working state from the repo itself (branch, uncommitted files, recent commits) plus the skill router, and flags a last session that ended without `/reflect` |
+| [`guard.sh`](hooks/guard.sh) | before Edit, Write, Bash, PowerShell | Blocks `rm -rf` (except SDD scratch under `.superpowers/sdd/`), force-push, `reset --hard` and other work-destroying git commands, `DROP`/`TRUNCATE`, bot attribution trailers, secret-shaped strings in commits, edits to secrets files, lockfiles and `.git/` internals, and em-dashes in written files (the session scratchpad is exempt). Blocks everything if `jq` is missing rather than failing open. Tests: `bash hooks/guard.test.sh` |
+| [`plan-redteam-gate.sh`](hooks/plan-redteam-gate.sh) | before ExitPlanMode; after Edit, Write | Blocks leaving plan mode until the plan has had a red-team pass (or an explicit, reasoned opt-out). After an edit to a `docs/superpowers/plans/` or `specs/` file, it reminds Claude to red-team it first |
+| [`session-context.sh`](hooks/session-context.sh) | session start, resume, clear, compact, fork | Injects working state from the repo itself (branch, uncommitted files, recent commits) plus the skill router |
 | [`lint-on-save.sh`](hooks/lint-on-save.sh) | after Edit, Write | Runs the project's own prettier and eslint on TS/JS files. Never blocks |
+
+`settings.json` also wires Impeccable's own hook (after Edit/Write, at session start, at stop). It no-ops when Impeccable isn't installed.
 
 ### Commands
 
@@ -67,7 +69,9 @@ bootstrap.sh       new-machine setup
 | Skill | Use it when |
 |---|---|
 | [`plan-redteam`](skills/plan-redteam/SKILL.md) | A spec or plan is done. A fresh agent attacks it with evidence, you defend or concede, and you get an agreed change list |
-| [`consult`](skills/consult/SKILL.md) | Choosing between options on something expensive or hard to reverse. Two blind agents each argue one side |
+| [`consult`](skills/consult/SKILL.md) | Choosing between options on something expensive or hard to reverse. Context-free agents argue the sides: one agent covers both for a light check, two (one per side) for a real fork |
+| [`debugging-protocol`](skills/debugging-protocol/SKILL.md) | A bug or failing test. Scales the process by risk: a repro gate, a ranked hypothesis ledger and a two-attempt loop bound |
+| [`subagent-dispatch`](skills/subagent-dispatch/SKILL.md) | Before delegating to any agent. Covers which model, how to write the brief, fixed-field returns, coordinator mode and plans written for delegation |
 | [`branch-audit`](skills/branch-audit/SKILL.md) | A big branch is about to ship. Parallel reviewer lanes (API surface, data path, conformance, deploy, client contract, privacy, omissions) feed one consolidated, verified list. Lane yield is tracked over time so weak lanes get cut |
 | [`buy-vs-build`](skills/buy-vs-build/SKILL.md) | You're about to hand-roll a queue, retry, cache, parser, auth or rate limiter. It checks installed deps first, then searches the web |
 | [`testing-workflow`](skills/testing-workflow/SKILL.md) | Any behavior change: spec first, a failing repro test before a bug fix |
@@ -98,7 +102,7 @@ claude   # log in once, then quit
 bash ~/.claude/bootstrap.sh
 ```
 
-The script installs CLI tools (winget, uv), PowerShell modules, the dotfiles and user-scope MCP servers (Playwright, mobile). Zed is installed as `$EDITOR`; swap it in `settings.json` if you use something else. It then shows a numbered menu of the third-party skills listed below and asks which to install: `all`, `none` or a list like `1,2,5`. To skip the prompt, pass `--skills all|none|1,2,5`. To add skills later, run `bash ~/.claude/scripts/install-skills.sh` (add `--dry-run` to preview). It's safe to rerun: installed items are skipped, overwritten dotfiles get a `.bak-<timestamp>` copy, and anything that fails is listed at the end. Plugins in `settings.json` download on the first `claude` start.
+The script installs CLI tools (winget, uv), PowerShell modules, the dotfiles, the user-scope mobile MCP server and the [`agent-browser`](https://github.com/vercel-labs/agent-browser) CLI for headless browser checks. Zed is installed as `$EDITOR`; swap it in `settings.json` if you use something else. It then shows a numbered menu of the third-party skills listed below and asks which to install: `all`, `none` or a list like `1,2,5`. To skip the prompt, pass `--skills all|none|1,2,5`. To add skills later, run `bash ~/.claude/scripts/install-skills.sh` (add `--dry-run` to preview). It's safe to rerun: installed items are skipped, overwritten dotfiles get a `.bak-<timestamp>` copy, and anything that fails is listed at the end. Plugins in `settings.json` download on the first `claude` start.
 
 Already have a `~/.claude`? Don't clone over it. Copy the pieces you want instead: `hooks/guard.sh` and its `settings.json` entry work on their own.
 

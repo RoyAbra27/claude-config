@@ -62,8 +62,11 @@ add_mcp() {
   if claude mcp get "$name" >/dev/null 2>&1; then echo "ok        $name"
   else claude mcp add --scope user "$name" -- "$@" && echo "added     $name" || missing+=("mcp $name"); fi
 }
-add_mcp playwright npx @playwright/mcp@latest
 add_mcp mobile npx -y @mobilenext/mobile-mcp@1.0.16
+
+step "agent-browser (headless browser CLI the skill router uses)"
+if command -v agent-browser >/dev/null; then echo "ok        agent-browser"
+else npm i -g agent-browser@0.42.0 && agent-browser install && echo "installed agent-browser" || missing+=("agent-browser"); fi
 
 step "third-party skills (upstream, see README Credits)"
 bash "$REPO/scripts/install-skills.sh" ${SKILLS:+--select "$SKILLS"} || missing+=("third-party skills: rerun scripts/install-skills.sh")
